@@ -83,19 +83,26 @@ public class AssociativeArray<K, V> {
 
   /**
    * Set the value associated with key to value. Future calls to get(key) will return value.
+   * 
+   * @param key the key to associate with the value
+   * @param value the value to associate with the key
    */
   public void set(K key, V value) {
-    int index;
-    try {
-      index = find(key);
-      // Key found, replace the value
-      pairs[index].value = value;
-    } catch (KeyNotFoundException e) {
-      // Key not found, add a new key-value pair
-      if (size == pairs.length) {
-        expand();
+    if (key == null) {
+      setNullKey(value);
+    } else {
+      int index;
+      try {
+        index = find(key);
+        // Key found, replace the value
+        pairs[index].value = value;
+      } catch (KeyNotFoundException e) {
+        // Key not found, add a new key-value pair
+        if (size == pairs.length) {
+          expand();
+        }
+        pairs[size++] = new KVPair<>(key, value);
       }
-      pairs[size++] = new KVPair<>(key, value);
     }
   } // set(K,V)
 
@@ -168,4 +175,20 @@ public class AssociativeArray<K, V> {
     }
     throw new KeyNotFoundException();
   } // find(K)
+
+  /**
+   * Set the value associated with a null key.
+   * 
+   * @param value the value to associate with the null key
+   */
+  private void setNullKey(V value) {
+    // Check if there is already a null key in the array
+    for (int i = 0; i < size; i++) {
+      if (pairs[i].key == null) {
+        // Null key found, replace the value
+        pairs[i].value = value;
+        return;
+      }
+    }
+  }
 } // class AssociativeArray
