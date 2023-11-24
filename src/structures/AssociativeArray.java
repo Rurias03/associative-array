@@ -108,12 +108,18 @@ public class AssociativeArray<K, V> {
 
   /**
    * Get the value associated with key.
-   *
+   * 
+   * @param key the key to look up
+   * @return the value associated with the key
    * @throws KeyNotFoundException when the key does not appear in the associative array.
    */
   public V get(K key) throws KeyNotFoundException {
-    int index = find(key);
-    return pairs[index].value;
+    if (key == null) {
+      return getNullKey();
+    } else {
+      int index = find(key);
+      return pairs[index].value;
+    }
   } // get(K)
 
   /**
@@ -190,5 +196,30 @@ public class AssociativeArray<K, V> {
         return;
       }
     }
+
+    // Null key not found, add a new null key-value pair
+    if (size == pairs.length) {
+      expand();
+    }
+    pairs[size++] = new KVPair<>(null, value);
+  }
+
+  /**
+   * Get the value associated with a null key.
+   * 
+   * @return the value associated with the null key
+   * @throws KeyNotFoundException when there is no value associated with the null key.
+   */
+  private V getNullKey() throws KeyNotFoundException {
+    // Check if there is a null key in the array
+    for (int i = 0; i < size; i++) {
+      if (pairs[i].key == null) {
+        // Null key found, return the value
+        return pairs[i].value;
+      }
+    }
+
+    // Null key not found, throw an exception
+    throw new KeyNotFoundException("Null key not found");
   }
 } // class AssociativeArray
