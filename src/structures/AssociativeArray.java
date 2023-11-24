@@ -124,13 +124,20 @@ public class AssociativeArray<K, V> {
 
   /**
    * Determine if key appears in the associative array.
+   * 
+   * @param key the key to check for
+   * @return true if the key appears in the associative array, false otherwise
    */
   public boolean hasKey(K key) {
-    try {
-      find(key);
-      return true;
-    } catch (KeyNotFoundException e) {
-      return false;
+    if (key == null) {
+      return hasNullKey();
+    } else {
+      try {
+        find(key);
+        return true;
+      } catch (KeyNotFoundException e) {
+        return false;
+      }
     }
   } // hasKey(K)
 
@@ -221,5 +228,23 @@ public class AssociativeArray<K, V> {
 
     // Null key not found, throw an exception
     throw new KeyNotFoundException("Null key not found");
+  }
+
+  /**
+   * Determine if a null key appears in the associative array.
+   * 
+   * @return true if a null key appears in the associative array, false otherwise
+   */
+  private boolean hasNullKey() {
+    // Check if there is a null key in the array
+    for (int i = 0; i < size; i++) {
+      if (pairs[i].key == null) {
+        // Null key found
+        return true;
+      }
+    }
+
+    // Null key not found
+    return false;
   }
 } // class AssociativeArray
