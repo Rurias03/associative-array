@@ -2,6 +2,7 @@ package structures;
 
 import static java.lang.reflect.Array.newInstance;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * A basic implementation of Associative Arrays with keys of type K and values of type V.
@@ -182,12 +183,13 @@ public class AssociativeArray<K, V> {
    */
   public int find(K key) throws KeyNotFoundException {
     for (int i = 0; i < size; i++) {
-      if (pairs[i].key.equals(key)) {
+      if (Objects.equals(pairs[i].key, key)) {
         return i;
       }
     }
     throw new KeyNotFoundException();
-  } // find(K)
+  }
+
 
   /**
    * Set the value associated with a null key.
@@ -197,7 +199,7 @@ public class AssociativeArray<K, V> {
   private void setNullKey(V value) {
     // Check if there is already a null key in the array
     for (int i = 0; i < size; i++) {
-      if (pairs[i].key == null) {
+      if (Objects.equals(pairs[i].key, null)) {
         // Null key found, replace the value
         pairs[i].value = value;
         return;
@@ -210,6 +212,7 @@ public class AssociativeArray<K, V> {
     }
     pairs[size++] = new KVPair<>(null, value);
   }
+
 
   /**
    * Get the value associated with a null key.
